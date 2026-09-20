@@ -1,0 +1,279 @@
+.landing-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  padding: 20px;
+}
+
+.landing-content {
+  width: 100%;
+  max-width: 400px;
+}
+
+.landing-header {
+  background: #0f0f0f;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.login-form-container {
+  text-align: center;
+}
+
+.login-form-container h2 {
+  font-size: 32px;
+  margin: 0 0 8px 0;
+  color: #fff;
+  font-weight: 700;
+}
+
+.tagline {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 24px 0;
+}
+
+.login-form-container form {
+  width: 100%;
+}
+
+.wallet-section-container {
+  text-align: center;
+}
+
+.wallet-section-container h2 {
+  font-size: 32px;
+  margin: 0 0 8px 0;
+  color: #fff;
+  font-weight: 700;
+}
+
+.wallet-section-container > .tagline {
+  margin-bottom: 20px !important;
+}
+
+.back-btn {
+  width: 100%;
+  padding: 12px 20px;
+  margin-top: 16px;
+  border: 1px solid #2a2a2a;
+  background: transparent;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+.form-group {
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 11px 13px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  box-sizing: border-box;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  background: #1a1a1a;
+  border-color: #333;
+}
+
+.form-input::placeholder {
+  color: #555;
+}
+
+.wallet-btn {
+  width: 100%;
+  padding: 14px 20px;
+  margin-bottom: 12px;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s;
+}
+
+.wallet-btn:hover:not(:disabled) {
+  background: #2a2a2a;
+  border-color: #444;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.wallet-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wallet-btn.metamask-btn:hover:not(:disabled) {
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+.wallet-btn.walletconnect-btn:hover:not(:disabled) {
+  border-color: #3b99fc;
+  color: #3b99fc;
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #2a2a2a;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid #6b2020;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  color: #ff8080;
+  font-size: 13px;
+}
+
+.error-message p {
+  margin: 0;
+}
+
+.info-box {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 16px;
+  font-size: 12px;
+}
+
+.info-box p {
+  margin: 0 0 6px 0;
+  color: #aaa;
+}
+
+.info-box p:last-child {
+  margin-bottom: 0;
+}
+
+.info-box a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.info-box a:hover {
+  text-decoration: underline;
+}
+
+.network-info {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.network-info p {
+  margin: 6px 0;
+  color: #aaa;
+}
+
+.network-info a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.network-info a:hover {
+  text-decoration: underline;
+}
+
+.wallet-connected-status {
+  text-align: center;
+  padding: 20px;
+}
+
+.connected-text {
+  color: #4caf50;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.wallet-address {
+  color: #888;
+  font-size: 12px;
+  font-family: monospace;
+  margin: 0 0 12px 0;
+}
+
+.waiting-text {
+  color: #aaa;
+  font-size: 14px;
+  margin: 0;
+}
+
+.demo-note {
+  text-align: center;
+  color: #555;
+  font-size: 11px;
+  margin-top: 12px;
+}
+
+@media (max-width: 480px) {
+  .landing-header {
+    padding: 24px;
+  }
+
+  .login-form-container h2,
+  .wallet-section-container h2 {
+    font-size: 28px;
+  }
+}
