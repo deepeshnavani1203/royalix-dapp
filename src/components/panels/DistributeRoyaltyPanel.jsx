@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { distributeRoyalty, getRoyalty, formatAddress } from '../../services/contractService';
 
-export const DistributeRoyaltyPanel = ({ provider }) => {
+export const DistributeRoyaltyPanel = ({ provider, onTransactionConfirmed }) => {
   const [royaltyId, setRoyaltyId] = useState('');
   const [royaltyData, setRoyaltyData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -99,6 +99,7 @@ export const DistributeRoyaltyPanel = ({ provider }) => {
         setMessage(`✅ Distribution complete! Hash: ${tx.hash.slice(0, 20)}...`);
         setRoyaltyId('');
         setRoyaltyData(null);
+        onTransactionConfirmed?.();
       }
     } catch (error) {
       console.error('Distribute error:', error);

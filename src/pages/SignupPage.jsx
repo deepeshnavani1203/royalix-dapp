@@ -78,7 +78,7 @@ export const SignupPage = ({ onSignupSuccess }) => {
       
       onSignupSuccess?.();
       navigate('/wallet');
-    } catch (err) {
+    } catch {
       setError('Signup failed. Please try again.');
     } finally {
       setLoading(false);

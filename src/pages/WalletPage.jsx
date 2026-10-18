@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BrowserProvider } from 'ethers';
 import '../styles/wallet.css';
@@ -7,12 +7,7 @@ export const WalletPage = ({ onWalletConnected }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [metamaskInstalled, setMetamaskInstalled] = useState(false);
-
-  useEffect(() => {
-    // Check if MetaMask is installed
-    setMetamaskInstalled(typeof window !== 'undefined' && window.ethereum !== undefined);
-  }, []);
+  const metamaskInstalled = typeof window !== 'undefined' && window.ethereum !== undefined;
 
   const handleMetaMaskConnect = async () => {
     setLoading(true);

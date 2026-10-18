@@ -24,8 +24,27 @@ export const VaultOverviewPanel = ({ provider, address, refreshTrigger }) => {
   }, [provider, address]);
 
   useEffect(() => {
-    refresh();
-  }, [refresh, refreshTrigger]);
+    let active = true;
+
+    const run = async () => {
+      if (!provider || !address) return;
+      setLoading(true);
+      setError(null);
+      try {
+        const d = await getVaultOverview(provider, address);
+        if (active) setData(d);
+      } catch (e) {
+        if (active) setError(e.message || 'Failed to load vault data');
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+
+    void run();
+    return () => {
+      active = false;
+    };
+  }, [provider, address, refreshTrigger]);
 
   return (
     <>

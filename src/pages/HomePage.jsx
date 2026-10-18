@@ -1,378 +1,185 @@
-import "../styles/vault.css";
+import { Link } from "react-router-dom";
+import "../styles/home.css";
 
-export const HomePage = ({ onSelect }) => {
-  return (
-    <div
-      className="vault-app"
-      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-    >
-      {/* ── Header ── */}
-      <header className="vault-header">
-        <div className="vault-logo">
-          <div className="vault-logo-badge">R</div>
-          RoyaliX
-        </div>
-        <div className="vault-header-center">
-          <div className="vault-network-pill">
-            <span className="vault-network-dot" />
-            Ethereum Sepolia
-          </div>
-        </div>
-        <div className="vault-header-right">
-          <span
-            style={{ fontSize: 12, color: "#52525b", letterSpacing: "0.3px" }}
-          >
-            Web3 Practical Experiments
-          </span>
-        </div>
-      </header>
+const destinations = [
+  {
+    number: "01",
+    eyebrow: "WALLET BASICS",
+    title: "MetaMask Integration",
+    description:
+      "Connect the browser extension, inspect your wallet address, and confirm the active Sepolia network.",
+    route: "/experiment/metamask",
+    action: "Open MetaMask experiment",
+    icon: "↗",
+    theme: "orange",
+    tags: ["Browser wallet", "Ethers v6", "Sepolia"],
+  },
+  {
+    number: "02",
+    eyebrow: "EXTERNAL WALLET",
+    title: "WalletConnect Integration",
+    description:
+      "Pair an external wallet through Reown AppKit and the WalletConnect QR session.",
+    route: "/experiment/walletconnect",
+    action: "Open WalletConnect experiment",
+    icon: "⌁",
+    theme: "blue",
+    tags: ["WalletConnect v2", "QR pairing", "Reown"],
+  },
+  {
+    number: "03",
+    eyebrow: "MAIN PROJECT",
+    title: "RoyaliX Platform",
+    description:
+      "Create royalty agreements, add ETH revenue, inspect live records, and distribute proceeds on-chain.",
+    route: "/royalix",
+    action: "Launch RoyaliX",
+    icon: "✳",
+    theme: "violet",
+    tags: ["Royalty splits", "Revenue", "Smart contract"],
+  },
+];
 
-      {/* ── Main ── */}
-      <main style={{ flex: 1 }}>
-        <div
-          style={{
-            width: "min(1100px, 92%)",
-            margin: "0 auto",
-            padding: "72px 0 80px",
-          }}
-        >
-          {/* Page title */}
-          <div style={{ textAlign: "center", marginBottom: 64 }}>
-            <div
-              style={{
-                display: "inline-block",
-                padding: "4px 14px",
-                background: "rgba(99,91,255,.08)",
-                border: "1px solid rgba(99,91,255,.18)",
-                borderRadius: 20,
-                fontSize: 10,
-                fontWeight: 700,
-                letterSpacing: "1.4px",
-                color: "#818cf8",
-                textTransform: "uppercase",
-                marginBottom: 24,
-              }}
-            >
-              Blockchain Practical — Three Experiments
-            </div>
-            <h1
-              style={{
-                fontSize: "clamp(34px, 5vw, 58px)",
-                fontWeight: 800,
-                letterSpacing: "-2px",
-                margin: "0 0 18px",
-                lineHeight: 1.05,
-                color: "#f4f4f5",
-              }}
-            >
-              RoyaliX <span style={{ color: "#635bff" }}>Dashboard</span>
-            </h1>
-            <p
-              style={{
-                fontSize: 15,
-                color: "#71717a",
-                maxWidth: 500,
-                margin: "0 auto",
-                lineHeight: 1.8,
-              }}
-            >
-              Three hands-on experiments covering wallet connections and
-              ERC-4626 tokenised vault interactions on Ethereum Sepolia.
-            </p>
-          </div>
-
-          {/* ── Cards ── */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-              gap: 20,
-            }}
-          >
-            <ExperimentCard
-              number="01"
-              title="MetaMask"
-              subtitle="Browser Wallet Connection"
-              desc="Connect using MetaMask browser extension. Demonstrates wallet address detection, network reading, and automatic Sepolia switching via Ethers.js v6."
-              tags={["MetaMask", "BrowserProvider", "Ethers v6"]}
-              color="#e07b39"
-              colorBg="rgba(224,123,57,.07)"
-              colorBorder="rgba(224,123,57,.18)"
-              steps={[
-                "Install MetaMask extension",
-                "Click Connect MetaMask",
-                "Approve the connection popup",
-                "Auto-switches to Sepolia",
-                "View address and network info",
-              ]}
-              onClick={() => onSelect("metamask")}
-            />
-
-            <ExperimentCard
-              number="02"
-              title="WalletConnect"
-              subtitle="Mobile Wallet via QR Code"
-              desc="Connect any mobile wallet using the WalletConnect v2 protocol. Scan the QR code with Trust Wallet, Rainbow, or any compatible mobile app."
-              tags={["WalletConnect v2", "QR Code", "Mobile Wallet"]}
-              color="#3b8de0"
-              colorBg="rgba(59,141,224,.07)"
-              colorBorder="rgba(59,141,224,.18)"
-              steps={[
-                "Click Connect WalletConnect",
-                "QR code modal appears",
-                "Open mobile wallet app",
-                "Scan the QR code",
-                "Approve on your phone",
-              ]}
-              onClick={() => onSelect("walletconnect")}
-            />
-
-            <ExperimentCard
-              number="03"
-              title="ERC-4626 Vault"
-              subtitle="Tokenised Vault Practical"
-              desc="Full lifecycle demo of an ERC-4626 vault. Mint MockUSDC, approve, deposit for shares, convert, withdraw, and redeem — all using deployed Sepolia contracts."
-              tags={["ERC-4626", "ERC-20", "MockUSDC", "Vault"]}
-              color="#635bff"
-              colorBg="rgba(99,91,255,.07)"
-              colorBorder="rgba(99,91,255,.18)"
-              steps={[
-                "Connect MetaMask",
-                "Mint MockUSDC tokens",
-                "Approve vault spending",
-                "Deposit and receive shares",
-                "Withdraw or redeem",
-              ]}
-              onClick={() => onSelect("vault")}
-            />
-          </div>
-
-          {/* ── Footer note ── */}
-          <div
-            style={{
-              marginTop: 48,
-              padding: "20px 28px",
-              background: "#0d0d10",
-              border: "1px solid #1a1a1e",
-              borderRadius: 12,
-              textAlign: "center",
-            }}
-          >
-            <p
-              style={{
-                fontSize: 12,
-                color: "#52525b",
-                margin: 0,
-                lineHeight: 1.7,
-              }}
-            >
-              All experiments run on{" "}
-              <span style={{ color: "#65d68a", fontWeight: 600 }}>
-                Ethereum Sepolia Testnet
-              </span>{" "}
-              — no real funds required. Get free test ETH at{" "}
-              <a
-                href="https://sepoliafaucet.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: "#93c5fd", textDecoration: "none" }}
-              >
-                sepoliafaucet.com
-              </a>
-            </p>
-          </div>
-        </div>
-      </main>
-
-      {/* ── Footer ── */}
-      <footer className="vault-footer">
-        <span>
-          <strong style={{ color: "#d4d4d8" }}>RoyaliX</strong> — Web3 Practical
-          Project
-        </span>
-        <span>React · Vite · Ethers.js v6 · Ethereum Sepolia</span>
-      </footer>
-    </div>
-  );
-};
-
-/* ── Card component ────────────────────────────────────── */
-const ExperimentCard = ({
-  number,
-  title,
-  subtitle,
-  desc,
-  tags,
-  color,
-  colorBg,
-  colorBorder,
-  steps,
-  onClick,
-}) => (
-  <div
-    onClick={onClick}
-    style={{
-      background: "#111114",
-      border: `1px solid ${colorBorder}`,
-      borderRadius: 16,
-      padding: "28px",
-      cursor: "pointer",
-      transition: "transform .18s, box-shadow .18s",
-      display: "flex",
-      flexDirection: "column",
-    }}
-    onMouseEnter={(e) => {
-      e.currentTarget.style.transform = "translateY(-3px)";
-      e.currentTarget.style.boxShadow = `0 16px 48px ${colorBg}`;
-    }}
-    onMouseLeave={(e) => {
-      e.currentTarget.style.transform = "translateY(0)";
-      e.currentTarget.style.boxShadow = "none";
-    }}
-  >
-    {/* Number + icon row */}
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 22,
-      }}
-    >
-      <div
-        style={{
-          width: 42,
-          height: 42,
-          borderRadius: 11,
-          background: colorBg,
-          border: `1px solid ${colorBorder}`,
-          display: "grid",
-          placeItems: "center",
-          fontSize: 14,
-          fontWeight: 800,
-          color,
-        }}
-      >
-        {number}
+export const HomePage = () => (
+  <div className="home-shell">
+    <header className="home-nav">
+      <Link className="home-brand" to="/" aria-label="RoyaliX home">
+        <span className="brand-mark">R</span>
+        <span>royalix</span>
+        <span className="brand-type">WEB3 LAB</span>
+      </Link>
+      <nav className="home-nav-links" aria-label="Main navigation">
+        <a href="#experiments">Experiments</a>
+        <Link to="/royalix">Main project</Link>
+      </nav>
+      <div className="home-network">
+        <span className="home-network-dot" />
+        Sepolia testnet
       </div>
-      <span
-        style={{
-          fontSize: 10,
-          fontWeight: 700,
-          color: "#2a2a32",
-          letterSpacing: "1px",
-          textTransform: "uppercase",
-        }}
-      >
-        Experiment {number}
-      </span>
-    </div>
+    </header>
 
-    {/* Title block */}
-    <div
-      style={{
-        fontSize: 10,
-        color: "#52525b",
-        fontWeight: 700,
-        letterSpacing: "1px",
-        textTransform: "uppercase",
-        marginBottom: 6,
-      }}
-    >
-      {subtitle}
-    </div>
-    <div
-      style={{
-        fontSize: 19,
-        fontWeight: 800,
-        color: "#f4f4f5",
-        marginBottom: 12,
-      }}
-    >
-      {title}
-    </div>
-    <p
-      style={{
-        fontSize: 13,
-        color: "#71717a",
-        lineHeight: 1.75,
-        margin: "0 0 22px",
-      }}
-    >
-      {desc}
-    </p>
-
-    {/* Steps */}
-    <div style={{ marginBottom: 22 }}>
-      {steps.map((s, i) => (
-        <div
-          key={i}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 9,
-            marginBottom: 7,
-          }}
-        >
-          <span
-            style={{
-              width: 17,
-              height: 17,
-              borderRadius: 4,
-              background: colorBg,
-              border: `1px solid ${colorBorder}`,
-              display: "grid",
-              placeItems: "center",
-              fontSize: 9,
-              fontWeight: 800,
-              color,
-              flexShrink: 0,
-            }}
-          >
-            {i + 1}
-          </span>
-          <span style={{ fontSize: 12, color: "#71717a" }}>{s}</span>
+    <main className="home-main">
+      <section className="home-hero">
+        <div className="hero-copy">
+          <div className="hero-kicker">
+            <span className="kicker-line" />
+            DECENTRALIZED ROYALTY INFRASTRUCTURE
+          </div>
+          <h1>
+            Fair value flows,
+            <br />
+            <span>built on-chain.</span>
+          </h1>
+          <p>
+            RoyaliX is a royalty and revenue distribution platform. Explore
+            wallet integrations, then manage agreements transparently on
+            Ethereum Sepolia.
+          </p>
+          <div className="hero-actions">
+            <Link className="home-primary-action" to="/royalix">
+              Enter RoyaliX <span aria-hidden="true">↗</span>
+            </Link>
+            <a className="home-text-action" href="#experiments">
+              Explore experiments <span aria-hidden="true">↓</span>
+            </a>
+          </div>
         </div>
-      ))}
-    </div>
 
-    {/* Tags */}
-    <div
-      style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 24 }}
-    >
-      {tags.map((t) => (
-        <span
-          key={t}
-          style={{
-            padding: "3px 8px",
-            background: colorBg,
-            border: `1px solid ${colorBorder}`,
-            borderRadius: 4,
-            fontSize: 10,
-            fontWeight: 700,
-            color,
-          }}
-        >
-          {t}
-        </span>
-      ))}
-    </div>
+        <div className="hero-visual" aria-label="Royalty distribution overview">
+          <div className="orbit orbit-one" />
+          <div className="orbit orbit-two" />
+          <div className="hero-orb">
+            <span>R</span>
+            <small>ROYALIX</small>
+          </div>
+          <div className="flow-chip creator-chip">
+            <span className="flow-dot creator-dot" />
+            <span>
+              CREATOR <b>80%</b>
+            </span>
+          </div>
+          <div className="flow-chip platform-chip">
+            <span className="flow-dot platform-dot" />
+            <span>
+              PLATFORM <b>20%</b>
+            </span>
+          </div>
+          <div className="visual-caption">
+            <span>01 / 02</span>
+            programmable revenue splits
+          </div>
+        </div>
+      </section>
 
-    {/* CTA */}
-    <div
-      style={{
-        marginTop: "auto",
-        padding: "10px 16px",
-        background: colorBg,
-        border: `1px solid ${colorBorder}`,
-        borderRadius: 8,
-        textAlign: "center",
-        fontSize: 12,
-        fontWeight: 700,
-        color,
-      }}
-    >
-      Open Experiment {number} →
-    </div>
+      <section className="home-stats" aria-label="Project details">
+        <div>
+          <span className="stat-overline">NETWORK</span>
+          <strong>Ethereum Sepolia</strong>
+        </div>
+        <div>
+          <span className="stat-overline">CHAIN ID</span>
+          <strong>11155111</strong>
+        </div>
+        <div>
+          <span className="stat-overline">PLATFORM</span>
+          <strong>React · Ethers.js · Solidity</strong>
+        </div>
+        <div>
+          <span className="stat-overline">ACCESS</span>
+          <strong>Testnet only</strong>
+        </div>
+      </section>
+
+      <section id="experiments" className="destination-section">
+        <div className="section-heading">
+          <div>
+            <span className="section-kicker">LEARN · CONNECT · BUILD</span>
+            <h2>Choose your destination</h2>
+          </div>
+          <p>
+            Three focused experiences, one clear path from wallet connection
+            to on-chain royalty management.
+          </p>
+        </div>
+
+        <div className="destination-grid">
+          {destinations.map((destination) => (
+            <article
+              className={`destination-card ${destination.theme}`}
+              key={destination.number}
+            >
+              <div className="destination-topline">
+                <span className="destination-number">{destination.number}</span>
+                <span className="destination-icon" aria-hidden="true">
+                  {destination.icon}
+                </span>
+              </div>
+              <span className="destination-eyebrow">{destination.eyebrow}</span>
+              <h3>{destination.title}</h3>
+              <p>{destination.description}</p>
+              <div className="destination-tags">
+                {destination.tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+              <Link className="destination-link" to={destination.route}>
+                {destination.action}
+                <span aria-hidden="true">↗</span>
+              </Link>
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <footer className="home-footer">
+      <Link className="footer-brand" to="/">
+        <span className="brand-mark">R</span> RoyaliX
+      </Link>
+      <span>Decentralized Royalty &amp; Revenue Distribution</span>
+      <span className="footer-testnet">
+        <span className="home-network-dot" /> TESTNET ENVIRONMENT
+      </span>
+    </footer>
   </div>
 );

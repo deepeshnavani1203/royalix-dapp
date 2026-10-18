@@ -1,26 +1,30 @@
 import { useState } from 'react';
 import { createRoyalty } from '../../services/contractService';
 
-export const CreateRoyaltyPanel = ({ provider }) => {
+export const CreateRoyaltyPanel = ({ provider, onTransactionConfirmed }) => {
   const [creatorShare, setCreatorShare] = useState('80');
   const [platformShare, setPlatformShare] = useState('20');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
-  const [txHash, setTxHash] = useState('');
 
   const handleCreateRoyalty = async () => {
     try {
       setMessage('');
-      setTxHash('');
 
       // Validation
-      const creator = parseFloat(creatorShare);
-      const platform = parseFloat(platformShare);
+      const creator = Number(creatorShare);
+      const platform = Number(platformShare);
 
-      if (isNaN(creator) || isNaN(platform)) {
+      if (!Number.isInteger(creator) || !Number.isInteger(platform)) {
         setMessageType('error');
-        setMessage('❌ Both values must be numbers');
+        setMessage('❌ Share values must be whole-number percentages');
+        return;
+      }
+
+      if (creator < 0 || platform < 0 || creator > 100 || platform > 100) {
+        setMessageType('error');
+        setMessage('❌ Each share must be between 0% and 100%');
         return;
       }
 
@@ -30,19 +34,12 @@ export const CreateRoyaltyPanel = ({ provider }) => {
         return;
       }
 
-      if (creator < 0 || platform < 0) {
-        setMessageType('error');
-        setMessage('❌ Shares cannot be negative');
-        return;
-      }
-
       setLoading(true);
       setMessageType('');
       setMessage('⏳ Requesting wallet confirmation...');
 
       // Call contract
       const tx = await createRoyalty(provider, creator, platform);
-      setTxHash(tx.hash);
       setMessageType('pending');
       setMessage(`⏳ Transaction pending... ${tx.hash.slice(0, 10)}...`);
 
@@ -54,6 +51,7 @@ export const CreateRoyaltyPanel = ({ provider }) => {
         setMessage(`✅ Royalty created! Hash: ${tx.hash.slice(0, 20)}...`);
         setCreatorShare('80');
         setPlatformShare('20');
+        onTransactionConfirmed?.();
       }
     } catch (error) {
       console.error('Create royalty error:', error);

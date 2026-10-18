@@ -1,8 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
 import { BrowserProvider } from "ethers";
 import {
+  connectMetaMask,
   connectWalletConnect,
   disconnectWalletConnect,
+  subscribeWalletConnect,
 } from "../services/walletService";
 
 const SEPOLIA_CHAIN_ID = "0xaa36a7";
@@ -27,44 +29,119 @@ export const useWallet = () => {
   // ── auto-reconnect MetaMask on page reload ──
   useEffect(() => {
     if (!isMMInstalled()) return;
-    window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {
-      if (accounts.length === 0) return;
-      window.ethereum.request({ method: "eth_chainId" }).then((chainId) => {
-        setWallet({
-          ...EMPTY,
-          connected: true,
-          address: accounts[0],
-          provider: new BrowserProvider(window.ethereum),
-          network:
-            chainId === SEPOLIA_CHAIN_ID ? "Sepolia Testnet" : "Wrong Network",
-          chainId,
-          isSepolia: chainId === SEPOLIA_CHAIN_ID,
-          walletType: "metamask",
+    let active = true;
+    const restoreMetaMask = async () => {
+      try {
+        const accounts = await window.ethereum.request({
+          method: "eth_accounts",
         });
-      });
-    });
+        if (!active || accounts.length === 0) return;
+        const chainId = await window.ethereum.request({
+          method: "eth_chainId",
+        });
+        if (!active) return;
+        setWallet((current) =>
+          current.walletType
+            ? current
+            : {
+                ...EMPTY,
+                connected: true,
+                address: accounts[0],
+                provider: new BrowserProvider(window.ethereum),
+                network:
+                  chainId === SEPOLIA_CHAIN_ID
+                    ? "Sepolia Testnet"
+                    : "Wrong Network",
+                chainId,
+                isSepolia: chainId === SEPOLIA_CHAIN_ID,
+                walletType: "metamask",
+              },
+        );
+      } catch (error) {
+        if (active) {
+          setWallet((current) => ({
+            ...current,
+            error: error.message || "Could not restore MetaMask connection.",
+          }));
+        }
+      }
+    };
+    void restoreMetaMask();
+    return () => {
+      active = false;
+    };
   }, []);
+
+  useEffect(() => {
+    if (wallet.walletType !== "walletconnect") return;
+
+    return subscribeWalletConnect({
+      onAccountChanged: (address) => {
+        if (!address) {
+          setWallet(EMPTY);
+          return;
+        }
+        setWallet((current) => ({ ...current, address }));
+      },
+      onChainChanged: (chainId) => {
+        const isSepolia =
+          Number(chainId) === Number.parseInt(SEPOLIA_CHAIN_ID, 16);
+        setWallet((current) => ({
+          ...current,
+          chainId: chainId == null ? null : `0x${Number(chainId).toString(16)}`,
+          isSepolia,
+          network: chainId == null
+            ? "Network unavailable"
+            : isSepolia
+              ? "Sepolia Testnet"
+              : "Switching to Sepolia...",
+        }));
+      },
+      onNetworkSwitchError: (error) => {
+        setWallet((current) => ({
+          ...current,
+          isSepolia: false,
+          network: "Wrong Network",
+          error: error.message,
+        }));
+      },
+    });
+  }, [wallet.walletType]);
 
   // ── MetaMask account / chain listeners ──
   useEffect(() => {
     if (!isMMInstalled()) return;
     const onAccounts = (accounts) => {
-      if (accounts.length === 0) setWallet(EMPTY);
-      else setWallet((p) => ({ ...p, address: accounts[0] }));
+      setWallet((current) => {
+        if (current.walletType !== "metamask") return current;
+        if (accounts.length === 0) return EMPTY;
+        return { ...current, address: accounts[0] };
+      });
     };
-    const onChain = (chainId) =>
-      setWallet((p) => ({
-        ...p,
-        chainId,
-        isSepolia: chainId === SEPOLIA_CHAIN_ID,
-        network:
-          chainId === SEPOLIA_CHAIN_ID ? "Sepolia Testnet" : "Wrong Network",
-      }));
+    const onChain = (chainId) => {
+      setWallet((current) => {
+        if (current.walletType !== "metamask") return current;
+        return {
+          ...current,
+          chainId,
+          isSepolia: chainId === SEPOLIA_CHAIN_ID,
+          network:
+            chainId === SEPOLIA_CHAIN_ID ? "Sepolia Testnet" : "Wrong Network",
+        };
+      });
+    };
+    const onDisconnect = () => {
+      setWallet((current) =>
+        current.walletType === "metamask" ? EMPTY : current,
+      );
+    };
     window.ethereum.on("accountsChanged", onAccounts);
     window.ethereum.on("chainChanged", onChain);
+    window.ethereum.on("disconnect", onDisconnect);
     return () => {
       window.ethereum.removeListener("accountsChanged", onAccounts);
       window.ethereum.removeListener("chainChanged", onChain);
+      window.ethereum.removeListener("disconnect", onDisconnect);
     };
   }, []);
 
@@ -77,61 +154,30 @@ export const useWallet = () => {
       }));
       return;
     }
-    setWallet((p) => ({ ...p, loading: true, error: null }));
+    setWallet({ ...EMPTY, loading: true });
     try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      const chainId = await window.ethereum.request({ method: "eth_chainId" });
-      if (chainId !== SEPOLIA_CHAIN_ID) {
-        try {
-          await window.ethereum.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: SEPOLIA_CHAIN_ID }],
-          });
-        } catch (e) {
-          if (e.code === 4902) {
-            await window.ethereum.request({
-              method: "wallet_addEthereumChain",
-              params: [
-                {
-                  chainId: SEPOLIA_CHAIN_ID,
-                  chainName: "Ethereum Sepolia",
-                  rpcUrls: ["https://rpc.sepolia.org"],
-                  nativeCurrency: {
-                    name: "SepoliaETH",
-                    symbol: "ETH",
-                    decimals: 18,
-                  },
-                  blockExplorerUrls: ["https://sepolia.etherscan.io"],
-                },
-              ],
-            });
-          } else throw e;
-        }
+      if (wallet.walletType === "walletconnect") {
+        await disconnectWalletConnect();
       }
-      const finalChain = await window.ethereum.request({
-        method: "eth_chainId",
-      });
+      const result = await connectMetaMask();
       setWallet({
         ...EMPTY,
         connected: true,
-        address: accounts[0],
-        provider: new BrowserProvider(window.ethereum),
-        network:
-          finalChain === SEPOLIA_CHAIN_ID ? "Sepolia Testnet" : "Wrong Network",
-        chainId: finalChain,
-        isSepolia: finalChain === SEPOLIA_CHAIN_ID,
+        address: result.address,
+        provider: result.provider,
+        network: result.network,
+        chainId: result.chainId,
+        isSepolia: result.isSepolia,
         walletType: "metamask",
       });
     } catch (err) {
       setWallet((p) => ({
         ...p,
         loading: false,
-        error: err.message || "MetaMask connection failed",
+        error: err.message || "MetaMask connection failed.",
       }));
     }
-  }, []);
+  }, [wallet.walletType]);
 
   // ── Connect WalletConnect ──
   const connectWC = useCallback(async () => {
@@ -143,9 +189,9 @@ export const useWallet = () => {
         connected: true,
         address: result.address,
         provider: result.provider,
-        network: "Sepolia Testnet",
-        chainId: SEPOLIA_CHAIN_ID,
-        isSepolia: true,
+        network: result.network,
+        chainId: result.chainId,
+        isSepolia: result.isSepolia,
         walletType: "walletconnect",
       });
     } catch (err) {
@@ -159,8 +205,17 @@ export const useWallet = () => {
 
   // ── Disconnect ──
   const disconnect = useCallback(async () => {
-    if (wallet.walletType === "walletconnect") await disconnectWalletConnect();
-    setWallet(EMPTY);
+    try {
+      if (wallet.walletType === "walletconnect") {
+        await disconnectWalletConnect();
+      }
+      setWallet(EMPTY);
+    } catch (error) {
+      setWallet((current) => ({
+        ...current,
+        error: error.message || "Could not disconnect wallet.",
+      }));
+    }
   }, [wallet.walletType]);
 
   return {

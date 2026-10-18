@@ -43,7 +43,7 @@ export const LoginPage = ({ onLoginSuccess }) => {
       
       onLoginSuccess?.();
       navigate('/wallet');
-    } catch (err) {
+    } catch {
       setError('Login failed. Please try again.');
     } finally {
       setLoading(false);

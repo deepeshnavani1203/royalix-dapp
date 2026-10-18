@@ -39,8 +39,26 @@ export const MockUSDCPanel = ({ provider, address }) => {
   }, [provider, address]);
 
   useEffect(() => {
-    refresh();
-  }, [refresh]);
+    let active = true;
+
+    const run = async () => {
+      if (!provider || !address) return;
+      setLoading(true);
+      try {
+        const data = await getUSDCInfo(provider, address);
+        if (active) setInfo(data);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+
+    void run();
+    return () => {
+      active = false;
+    };
+  }, [provider, address]);
 
   // ── Helpers
   const txRun = async (setTx, fn) => {

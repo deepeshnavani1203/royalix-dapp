@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { formatEther } from 'ethers';
 import {
   getContractBalance,
@@ -9,16 +9,16 @@ import {
 
 export const ContractStatsPanel = ({ provider }) => {
   const [stats, setStats] = useState({
-    walletBalance: '0',
-    contractBalance: '0',
-    royaltyCount: 0,
-    owner: '',
-    walletAddress: '',
+    walletBalance: null,
+    contractBalance: null,
+    royaltyCount: null,
+    owner: null,
+    walletAddress: null,
     loading: true,
     error: '',
   });
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       setStats(prev => ({ ...prev, loading: true, error: '' }));
 
@@ -52,14 +52,13 @@ export const ContractStatsPanel = ({ provider }) => {
         error: error.message || 'Failed to fetch stats',
       }));
     }
-  };
+  }, [provider]);
 
   useEffect(() => {
-    fetchStats();
-    // Refresh every 10 seconds
+    void fetchStats();
     const interval = setInterval(fetchStats, 10000);
     return () => clearInterval(interval);
-  }, [provider]);
+  }, [fetchStats]);
 
   return (
     <div className="panel">
@@ -72,12 +71,22 @@ export const ContractStatsPanel = ({ provider }) => {
         Real-time statistics from your RoyaliX smart contract on Ethereum Sepolia.
       </p>
 
-      {stats.error && <div className="message error">{stats.error}</div>}
+      {stats.error && stats.owner !== null && (
+        <div className="message error">{stats.error}</div>
+      )}
 
       {stats.loading ? (
         <div style={{ textAlign: 'center', padding: '40px 0' }}>
           <div className="loading-spinner" style={{ margin: '0 auto 10px' }}></div>
-          <p style={{ color: '#a0a0b0' }}>Loading wallet & contract data...</p>
+          <p style={{ color: '#a0a0b0' }}>Loading live wallet & contract data...</p>
+        </div>
+      ) : stats.owner === null ? (
+        <div className="empty-state">
+          <strong>Contract data unavailable</strong>
+          <span>{stats.error || 'No response was received from the contract.'}</span>
+          <button className="subtle-action" onClick={fetchStats}>
+            Retry contract read
+          </button>
         </div>
       ) : (
         <>

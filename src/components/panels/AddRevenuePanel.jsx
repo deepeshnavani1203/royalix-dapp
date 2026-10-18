@@ -1,30 +1,28 @@
 import { useState } from 'react';
-import { addRevenue, formatAddress } from '../../services/contractService';
+import { addRevenue } from '../../services/contractService';
 
-export const AddRevenuePanel = ({ provider }) => {
+export const AddRevenuePanel = ({ provider, onTransactionConfirmed }) => {
   const [royaltyId, setRoyaltyId] = useState('');
   const [revenueAmount, setRevenueAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
-  const [txHash, setTxHash] = useState('');
 
   const handleAddRevenue = async () => {
     try {
       setMessage('');
-      setTxHash('');
 
       // Validation
-      const id = parseInt(royaltyId);
-      const amount = parseFloat(revenueAmount);
+      const id = Number(royaltyId);
+      const amount = Number(revenueAmount);
 
-      if (isNaN(id) || id < 0) {
+      if (!Number.isInteger(id) || id < 0) {
         setMessageType('error');
         setMessage('❌ Royalty ID must be a valid number');
         return;
       }
 
-      if (isNaN(amount) || amount <= 0) {
+      if (!Number.isFinite(amount) || amount <= 0) {
         setMessageType('error');
         setMessage('❌ Revenue amount must be a positive number');
         return;
@@ -36,7 +34,6 @@ export const AddRevenuePanel = ({ provider }) => {
 
       // Call contract
       const tx = await addRevenue(provider, id, amount);
-      setTxHash(tx.hash);
       setMessageType('pending');
       setMessage(`⏳ Transaction pending... ${tx.hash.slice(0, 10)}...`);
 
@@ -50,6 +47,7 @@ export const AddRevenuePanel = ({ provider }) => {
         );
         setRoyaltyId('');
         setRevenueAmount('');
+        onTransactionConfirmed?.();
       }
     } catch (error) {
       console.error('Add revenue error:', error);
@@ -143,12 +141,3 @@ export const AddRevenuePanel = ({ provider }) => {
     </div>
   );
 };
-
-const infoBoxStyle = `
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.3);
-  border-radius: 8px;
-  padding: 16px;
-  font-size: 13px;
-  color: #93c5fd;
-`;

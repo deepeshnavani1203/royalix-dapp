@@ -3,8 +3,6 @@ import '../styles/vault.css';
 const MOCKUSDC_ADDR = import.meta.env.VITE_MOCKUSDC_ADDRESS || 'Not configured';
 const VAULT_ADDR    = import.meta.env.VITE_VAULT_ADDRESS    || 'Not configured';
 
-const short = (a) => (a && a.length > 10) ? `${a.slice(0, 10)}…${a.slice(-6)}` : a;
-
 export const VaultLandingPage = ({ wallet }) => {
   const { connect, loading, error, isMetaMaskAvailable } = wallet;
 

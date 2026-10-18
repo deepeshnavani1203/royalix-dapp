@@ -431,3 +431,447 @@
 @media (max-width: 480px) {
   .stats-grid { grid-template-columns: 1fr; }
 }
+
+.royalix-dashboard {
+  background:
+    radial-gradient(ellipse 55% 28% at 84% 0%, rgba(76, 130, 113, .12), transparent 72%),
+    #090c11;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.royalix-dashboard .dashboard-header {
+  min-height: 72px;
+  height: auto;
+  padding: 12px max(5%, calc((100% - 1180px) / 2));
+  gap: 18px;
+  background: rgba(10, 14, 19, .9);
+  border-color: rgba(202, 215, 230, .1);
+}
+
+.dashboard-brand-group,
+.dashboard-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dashboard-brand {
+  gap: 8px;
+  color: #edf4fa;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.dashboard-brand .brand-mark {
+  width: 30px;
+  height: 30px;
+}
+
+.dashboard-brand-caption {
+  margin-left: 5px;
+  color: #758392;
+  font-size: 8px;
+  letter-spacing: 1.2px;
+}
+
+.back-link {
+  padding: 8px 10px;
+  border: 1px solid rgba(202, 215, 230, .12);
+  border-radius: 7px;
+  color: #aeb9c4;
+  background: rgba(255, 255, 255, .025);
+  font-size: 10px;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  border-color: rgba(164, 225, 201, .35);
+  color: #eaf4ee;
+}
+
+.royalix-dashboard .network-badge {
+  padding: 8px 11px;
+  border: 1px solid rgba(202, 215, 230, .1);
+  border-radius: 999px;
+  background: rgba(18, 27, 34, .7);
+  font-size: 10px;
+}
+
+.royalix-dashboard .network-dot {
+  background: #80d6ad;
+  box-shadow: 0 0 10px rgba(128, 214, 173, .45);
+}
+
+.royalix-dashboard .network-badge-wrong {
+  border-color: rgba(248, 113, 113, .25);
+  color: #ffaaaa;
+}
+
+.royalix-dashboard .network-badge-wrong .network-dot {
+  background: #f87171;
+  box-shadow: 0 0 8px rgba(248, 113, 113, .4);
+}
+
+.dashboard-wallet-type {
+  color: #9cadb8;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.royalix-dashboard .dashboard-main {
+  width: min(1180px, 90%);
+}
+
+.royalix-dashboard-intro {
+  margin: 8px 0 25px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.royalix-dashboard-intro h1 {
+  margin: 9px 0 6px;
+  color: #edf3f5;
+  font-size: clamp(25px, 4vw, 34px);
+  font-weight: 650;
+  letter-spacing: -1.4px;
+}
+
+.royalix-dashboard-intro p {
+  max-width: 570px;
+  margin: 0;
+  color: #8d9aa6;
+  font-size: 11px;
+  line-height: 1.75;
+}
+
+.contract-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(128, 214, 173, .16);
+  border-radius: 7px;
+  color: #a2c8b7;
+  background: rgba(128, 214, 173, .045);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.contract-live-badge .network-dot {
+  width: 6px;
+  height: 6px;
+}
+
+.network-warning {
+  margin: 8px 0 20px;
+}
+
+.network-switch-action {
+  margin-left: 12px;
+  padding: 6px 9px;
+  border: 1px solid rgba(248, 113, 113, .24);
+  border-radius: 6px;
+  color: #ffd0d0;
+  background: rgba(248, 113, 113, .08);
+  font-size: 10px;
+}
+
+.network-switch-action:hover:not(:disabled) {
+  background: rgba(248, 113, 113, .14);
+}
+
+.royalix-dashboard .tabs {
+  gap: 7px;
+  padding-bottom: 13px;
+  border-color: rgba(202, 215, 230, .1);
+}
+
+.royalix-dashboard .tab {
+  border-radius: 7px;
+  font-size: 10px;
+}
+
+.royalix-dashboard .tab.active {
+  border-color: rgba(164, 225, 201, .23);
+  color: #c3ecd9;
+  background: rgba(115, 177, 150, .1);
+}
+
+.royalix-dashboard .panel {
+  border-color: rgba(202, 215, 230, .11);
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgba(17, 24, 31, .96), rgba(13, 18, 24, .98));
+}
+
+.royalix-dashboard .panel h2 {
+  color: #e9f0f3;
+  font-size: 17px;
+}
+
+.royalix-dashboard .panel-number {
+  color: #8cb9a6;
+  font-size: 8px;
+  letter-spacing: 1.4px;
+}
+
+.royalix-dashboard .panel-description {
+  color: #96a3ae;
+  font-size: 11px;
+}
+
+.subtle-action {
+  padding: 8px 12px;
+  border: 1px solid rgba(202, 215, 230, .12);
+  border-radius: 7px;
+  color: #cad7de;
+  background: rgba(255, 255, 255, .025);
+  font-size: 10px;
+}
+
+.subtle-action:hover:not(:disabled) {
+  border-color: rgba(164, 225, 201, .3);
+}
+
+.empty-state {
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px dashed rgba(202, 215, 230, .13);
+  border-radius: 9px;
+  color: #91a0ac;
+  text-align: center;
+  font-size: 10px;
+}
+
+.empty-state strong {
+  color: #e1e9ec;
+  font-size: 13px;
+}
+
+.empty-state-icon {
+  color: #9bd0b8;
+  font-size: 24px;
+}
+
+.agreement-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 11px;
+}
+
+.agreement-card {
+  padding: 16px;
+  border: 1px solid rgba(202, 215, 230, .1);
+  border-radius: 9px;
+  background: rgba(7, 11, 15, .45);
+}
+
+.agreement-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.agreement-id {
+  color: #8cb9a6;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.1px;
+}
+
+.agreement-card h3 {
+  margin: 6px 0 0;
+  color: #e4edf0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.agreement-status {
+  padding: 5px 8px;
+  border: 1px solid rgba(128, 214, 173, .18);
+  border-radius: 999px;
+  color: #a6dfc0;
+  background: rgba(128, 214, 173, .07);
+  font-size: 8px;
+}
+
+.agreement-status.inactive {
+  border-color: rgba(248, 113, 113, .2);
+  color: #f7a4a4;
+  background: rgba(248, 113, 113, .06);
+}
+
+.agreement-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 17px 0 13px;
+}
+
+.agreement-metrics > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.agreement-metrics span {
+  color: #788794;
+  font-size: 8px;
+}
+
+.agreement-metrics strong {
+  color: #dce7e8;
+  font-size: 10px;
+  font-weight: 620;
+}
+
+.agreement-address {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(202, 215, 230, .08);
+  color: #758391;
+  font-size: 8px;
+}
+
+.agreement-address code {
+  color: #adbcc5;
+  font-size: 9px;
+  overflow-wrap: anywhere;
+}
+
+.royalix-dashboard .dashboard-footer {
+  border-color: rgba(202, 215, 230, .1);
+  color: #73818e;
+  font-size: 9px;
+}
+
+.connect-gate {
+  min-height: calc(100vh - 72px);
+  display: grid;
+  place-items: center;
+  padding: 30px 6%;
+}
+
+.connect-gate-card {
+  width: min(520px, 100%);
+  padding: 34px;
+  border: 1px solid rgba(202, 215, 230, .12);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(18, 27, 34, .94), rgba(12, 17, 23, .98));
+  box-shadow: 0 30px 100px rgba(0, 0, 0, .24);
+}
+
+.connect-gate-card h1 {
+  margin: 12px 0;
+  color: #edf3f5;
+  font-size: 26px;
+  letter-spacing: -1px;
+}
+
+.connect-gate-card > p {
+  margin: 0;
+  color: #9aa7b1;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.connect-gate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.connect-gate-actions .btn {
+  width: auto;
+  margin: 0;
+  justify-content: center;
+  flex: 1 1 170px;
+}
+
+.gate-network-note {
+  margin-top: 18px;
+  color: #8ca99c;
+  font-size: 9px;
+  letter-spacing: .3px;
+}
+
+@media (max-width: 800px) {
+  .royalix-dashboard .dashboard-header {
+    align-items: flex-start;
+  }
+
+  .dashboard-brand-caption,
+  .dashboard-wallet-type {
+    display: none;
+  }
+
+  .royalix-dashboard-intro {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .royalix-dashboard .tabs {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .royalix-dashboard .tab {
+    width: auto;
+  }
+
+  .agreement-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .royalix-dashboard .dashboard-header {
+    padding: 12px 5%;
+  }
+
+  .dashboard-brand-group {
+    flex-wrap: wrap;
+  }
+
+  .royalix-dashboard .network-badge {
+    font-size: 9px;
+  }
+
+  .royalix-dashboard .wallet-info {
+    gap: 6px;
+  }
+
+  .royalix-dashboard .wallet-address {
+    padding: 7px 9px;
+    font-size: 10px;
+  }
+
+  .royalix-dashboard .disconnect-btn {
+    padding: 8px 9px;
+    font-size: 10px;
+  }
+
+  .royalix-dashboard .dashboard-main {
+    width: 92%;
+  }
+
+  .royalix-dashboard .tabs {
+    flex-wrap: nowrap;
+  }
+
+  .agreement-metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+}

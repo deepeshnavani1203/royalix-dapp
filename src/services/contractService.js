@@ -1,4 +1,13 @@
-import { Contract, formatUnits, parseUnits } from "ethers";
+import {
+  Contract,
+  formatEther,
+  formatUnits,
+  getAddress,
+  isAddress,
+  parseEther,
+  parseUnits,
+} from "ethers";
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from "../contractInfo";
 import { MOCKUSDC_ADDRESS, MOCKUSDC_ABI } from "../contracts/mockUSDC";
 import { VAULT_ADDRESS, VAULT_ABI } from "../contracts/studentVault";
 
@@ -31,6 +40,86 @@ export const fmt = (raw, decimals = 18, displayDecimals = 4) => {
 /** Parse a human-readable string to BigInt wei */
 export const parse = (value, decimals = 18) =>
   parseUnits(String(value), decimals);
+
+// ─── RoyaliX ────────────────────────────────────────────────────────────────
+
+const royaltyContract = (provider) => {
+  if (!CONTRACT_ADDRESS || !isAddress(CONTRACT_ADDRESS)) {
+    throw new Error("Set a valid VITE_CONTRACT_ADDRESS in your .env file");
+  }
+  return new Contract(
+    getAddress(CONTRACT_ADDRESS),
+    CONTRACT_ABI,
+    provider,
+  );
+};
+
+const writableRoyaltyContract = async (provider) => {
+  const network = await provider.getNetwork();
+  if (Number(network.chainId) !== 11155111) {
+    throw new Error(
+      "Wrong network. Switch your wallet to Sepolia (chain ID 11155111) before submitting this transaction.",
+    );
+  }
+  return royaltyContract(provider).connect(await provider.getSigner());
+};
+
+export const formatAddress = (address) =>
+  address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "";
+
+export const createRoyalty = async (provider, creatorShare, platformShare) => {
+  const contract = await writableRoyaltyContract(provider);
+  return contract.createRoyalty(creatorShare, platformShare);
+};
+
+export const addRevenue = async (provider, royaltyId, amount) => {
+  const contract = await writableRoyaltyContract(provider);
+  return contract.addRevenue(royaltyId, { value: parseEther(String(amount)) });
+};
+
+export const getRoyalty = async (provider, royaltyId) => {
+  const [creator, totalRevenue, creatorShare, platformShare, active] =
+    await royaltyContract(provider).getRoyalty(royaltyId);
+  return {
+    creator,
+    totalRevenue,
+    creatorShare: Number(creatorShare),
+    platformShare: Number(platformShare),
+    active,
+  };
+};
+
+export const getAllRoyalties = async (provider) => {
+  const contract = royaltyContract(provider);
+  const count = Number(await contract.royaltyCount());
+  const records = await Promise.all(
+    Array.from({ length: count }, (_, royaltyId) =>
+      contract.getRoyalty(royaltyId).then((royalty) => ({
+        id: royaltyId,
+        creator: royalty[0],
+        totalRevenue: royalty[1],
+        creatorShare: Number(royalty[2]),
+        platformShare: Number(royalty[3]),
+        active: royalty[4],
+      })),
+    ),
+  );
+  return records;
+};
+
+export const distributeRoyalty = async (provider, royaltyId) => {
+  const contract = await writableRoyaltyContract(provider);
+  return contract.distributeRoyalty(royaltyId);
+};
+
+export const getContractBalance = async (provider) =>
+  formatEther(await royaltyContract(provider).getContractBalance());
+
+export const getRoyaltyCount = async (provider) =>
+  Number(await royaltyContract(provider).royaltyCount());
+
+export const getContractOwner = async (provider) =>
+  royaltyContract(provider).owner();
 
 // ─── MockUSDC (ERC-20) ──────────────────────────────────────────────────────
 
